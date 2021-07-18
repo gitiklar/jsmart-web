@@ -4,10 +4,8 @@ import { of } from 'rxjs';
 
 import * as types from './actionTypes';
 import { BaseRegister } from 'consts/userEvents';
-//import { LogEventsKeys } from 'enums/logEvents';
 import AuthPhone from '../../services/authPhone';
 import QueueService from '../../services/queue';
-//import LogEventsService from '../../services/logEvents';
 
 export const loginWithPhone = action$ =>
   action$.pipe(
@@ -42,26 +40,18 @@ export const loginWithPhone = action$ =>
     mergeMap(async ({verificationCode}) => {
       let authUser;
       try {
-
-      //  firebase.auth().onAuthStateChanged(authStateObserver);
-
-
         authUser = await AuthPhone.verifyCode(verificationCode);
-
-
+        if(authUser.error) throw new Error(authUser.error);
         const isNewUser = authUser.user.additionalUserInfo?.isNewUser;
         if (isNewUser) {
           QueueService.sendEvent(authUser.user.user.uid, BaseRegister.Register, {
             method: 'phone',
           });
-          //LogEventsService.logEvent(LogEventsKeys.SignUp, { method: 'phone' });
-        } else {
-          //LogEventsService.logEvent(LogEventsKeys.Login, { method: 'phone' });
         }
         return {
           type: types.AUTH_LOGIN_WITH_PHONE_VERIFICATION_SUCCESSFULLY,
         };
-      } catch (error) {        
+      } catch (error) {
         return {
           type: types.AUTH_LOGIN_WITH_PHONE_VERIFICATION_FAILED,
           error: error?.message,

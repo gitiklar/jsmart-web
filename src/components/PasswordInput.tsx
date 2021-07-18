@@ -1,22 +1,26 @@
 import React from "react";
 import TextInput from "./TextInput";
 
-export default ({ password, setPassword }) => {
+export default ({ password, setPassword , setIsValid}) => {
 
-  const handlePasswordChange = event => {
-    const value = event.target.value;
-    setPassword(value);
+  const handlePasswordChange = e => {
+    const newVal = e.target.value;
+    setPassword(newVal);
+    setIsValid(newVal.length === 6);
   };
 
   return (
     <TextInput
+      value={password}
+      onChange={handlePasswordChange}
       autoFocus
       id="standard-password-input"
       type="password"
       color="secondary"
       inputProps={{ maxLength: 6 }}
-      value={password}
-      onChange={handlePasswordChange}
+      variant="outlined"
+      margin="normal"
+      fullWidth
     />
   );
 };

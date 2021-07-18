@@ -1,4 +1,4 @@
-//import database from 'firebase/database';
+import firebase from 'firebase';
 import { QueueEvents } from 'consts/userEvents';
 
 class QueueService {
@@ -10,15 +10,15 @@ class QueueService {
   }
 
   async sendEvent(uid: string, eventName: QueueEvents, extraData = {}) {
-    // return database()
-    //   .ref(this.BASE_REF)
-    //   .push({
-    //     uid: uid,
-    //     eventName: eventName,
-    //     timeStamp: database.ServerValue.TIMESTAMP,
-    //     extraData: extraData,
-    //     ip: this.ip,
-    //   });
+    return firebase.database()
+      .ref(this.BASE_REF)
+      .push({
+        uid: uid,
+        eventName: eventName,
+        timeStamp: firebase.database.ServerValue.TIMESTAMP,
+        extraData: extraData,
+        ip: this.ip,
+      });
   }
 }
 

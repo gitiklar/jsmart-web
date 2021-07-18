@@ -11,18 +11,14 @@ class AuthPhone {
 
   }
 
-  linkPhone(phone) {
-    return new Observable(subscriber => {
-        const appVerifier = getRecaptchaVerifier();
-        firebase.auth().signInWithPhoneNumber(`+972 ${phone}`, appVerifier)
-        .then((confirmationResult) => {
-            this.confirmationResult = confirmationResult;
-            console.log(this.confirmationResult);
-            
-            subscriber.next('OK');
-        }).catch((error) => {
-            subscriber.error(error);
-        });
+  linkPhone(phone): Observable<string> {
+    return new Observable(async subscriber => {
+      try {
+        this.confirmationResult = await firebase.auth().signInWithPhoneNumber(`+972 ${phone}`, getRecaptchaVerifier());
+        subscriber.next('OK');
+      } catch (error) {
+        subscriber.error(error);
+      }
     });
   }
 
@@ -31,11 +27,19 @@ class AuthPhone {
   }
 
   async verifyCode(code) {
+//     firebase.auth().onAuthStateChanged((user) => {
+//      
+//     });
+//     https://stackoverflow.com/questions/50615308/how-to-check-if-a-user-already-exists-in-firebase-during-phone-auth
+      
+
+// 1.) detect new user
+
       try {
         const { user } = await this.confirmationResult.confirm(code);
         return { user }; 
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        return { error }; 
       }
   }
 

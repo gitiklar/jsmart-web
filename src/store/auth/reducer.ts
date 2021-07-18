@@ -21,5 +21,14 @@ export default produce((state , action) => {
     case types.AUTH_LOGIN_WITH_PHONE_FAILED:
         state.loginWithPhoneStatus = LOGIN_WITH_PHONE_STATUS.LOGIN_FAILED;
         break;
+    case types.AUTH_LOGIN_WITH_PHONE_VERIFICATION_SUCCESSFULLY:
+        state.loginWithPhoneStatus = LOGIN_WITH_PHONE_STATUS.LOGIN_SUCCESSFULLY;
+        break;
+    case types.AUTH_LOGIN_WITH_PHONE_VERIFICATION:
+        state.loginWithPhoneStatus = LOGIN_WITH_PHONE_STATUS.VERIFICATION_PENDING;
+        break;
+    case types.AUTH_LOGIN_WITH_PHONE_VERIFICATION_FAILED:
+        state.loginWithPhoneStatus = LOGIN_WITH_PHONE_STATUS.VERIFICATION_FAILED;
+        break;
   }
 } , initState);
